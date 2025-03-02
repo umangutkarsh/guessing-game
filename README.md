@@ -80,4 +80,30 @@ Globetrotter is a full-stack web application where users are challenged to guess
    ```bash
    git clone https://github.com/yourusername/guessing-game.git
    cd guessing-game/backend
+   cd guessing-game/frontend
+   ```
+
+3. **Setup env files**
+
+   Create one env inside backend folder 
+   ```bash
+   FRONTEND_URL=http://localhost:3000
+   ```
+
+   Create one env.local file inside frontend folder
+   ```bash
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
+   ```
+
+4. **Install dependencies and start the server**
+
+   Run the following in frontend
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+   Run the following in backend
+   ```bash
+   go run cmd/main.go
    ```
