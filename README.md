@@ -78,6 +78,6 @@ Globetrotter is a full-stack web application where users are challenged to guess
 2. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/globetrotter-challenge.git
-   cd globetrotter-challenge/backend
+   git clone https://github.com/yourusername/guessing-game.git
+   cd guessing-game/backend
    ```
