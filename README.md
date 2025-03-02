@@ -95,7 +95,15 @@ Globetrotter is a full-stack web application where users are challenged to guess
    NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api/v1
    ```
 
-4. **Install dependencies and start the server**
+4. **Setup postgres**
+
+   Spin up the postgres docker-file using docker compose using these commands
+   ```bash
+   cd guessing-game/backend
+   docker compose up -d
+   ```
+
+6. **Install dependencies and start the server**
 
    Run the following in frontend
    ```bash
