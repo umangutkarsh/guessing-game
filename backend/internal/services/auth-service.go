@@ -25,7 +25,7 @@ func (s *AuthService) RegisterUser(username string) (*models.User, error) {
 	}
 
 	user := models.User{
-		ID:       uuid.New(), // generate a new UUID
+		ID:       uuid.New(),
 		Username: username,
 		Score:    0,
 	}

@@ -10,14 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// NewRouter is exported (capital 'N'), returning a *gin.Engine.
 func NewRouter() *gin.Engine {
 	api := "api"
 	version := "v1"
 
     r := gin.Default()
 
-	// Disable automatic trailing slash redirection.
 	r.RedirectTrailingSlash = false
 
 	// Enable CORS with custom configuration.

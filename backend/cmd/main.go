@@ -18,20 +18,13 @@ func init() {
 		log.Println("Warning: .env file not found")
 	}
 
-	// Initialize GORM client (with retry and auto-migration)
 	postgresdb.InitGormClient()
 
-	// Set up the service instances now that the DB is initialized.
 	db := postgresdb.GetGormClient()
 	handlers.AuthService = services.NewAuthService(db)
 	handlers.GameService = services.NewGameService(db)
 	handlers.ChallengeService = services.NewChallengeService(db)
 
-	// (Optional) Seed the database with cities data if needed.
-	// You may have your seed package's function called here.
-	// For example: if err := seed.SeedCities(); err != nil { ... }
-
-	// Seed the database with cities data if needed
 	if err := seed.SeedCities(); err != nil {
 		log.Fatalf("Failed to seed cities data: %v", err)
 	}

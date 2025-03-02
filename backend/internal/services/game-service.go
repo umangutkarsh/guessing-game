@@ -49,7 +49,6 @@ func (s *GameService) GetRandomDestination() (*RandomDestinationResponse, error)
 	}
 	selectedClues := clues[:nClues]
 
-	// Build options: include the correct destination and three decoys.
 	var options []Option
 	correctOption := Option{
 		CityID:   destination.ID,
@@ -73,7 +72,7 @@ func (s *GameService) GetRandomDestination() (*RandomDestinationResponse, error)
 	})
 
 	resp := RandomDestinationResponse{
-		QuestionToken: destination.ID.String(), // use UUID string as token
+		QuestionToken: destination.ID.String(),
 		Clues:         selectedClues,
 		Options:       options,
 	}

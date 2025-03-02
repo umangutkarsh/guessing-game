@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupRoutes attaches all routes to the given Gin engine.
 func SetupRoutes(r *gin.RouterGroup) {
 	// Auth routes
 	auth := r.Group("/auth")

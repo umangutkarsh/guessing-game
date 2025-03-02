@@ -1,4 +1,3 @@
-// internal/adapter/infrastructure/postgresdb/gorm_client.go
 package postgresdb
 
 import (
@@ -19,7 +18,6 @@ var (
 	once       sync.Once
 )
 
-// Config holds database configuration
 type Config struct {
 	Host     string
 	User     string
@@ -29,7 +27,6 @@ type Config struct {
 	SSLMode  string
 }
 
-// DefaultConfig returns default database configuration
 func DefaultConfig() *Config {
 	return &Config{
 		Host:     getEnvOrDefault("DB_HOST", "localhost"),
@@ -48,13 +45,11 @@ func getEnvOrDefault(key, defaultValue string) string {
 	return defaultValue
 }
 
-// BuildDSN builds the database connection string
 func (c *Config) BuildDSN() string {
 	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		c.Host, c.User, c.Password, c.DBName, c.Port, c.SSLMode)
 }
 
-// InitGormClient initializes the database connection with retry mechanism
 func InitGormClient() {
 	config := DefaultConfig()
 	once.Do(func() {
@@ -62,7 +57,6 @@ func InitGormClient() {
 		maxRetries := 5
 		retryDelay := time.Second * 5
 
-		// Configure GORM logger
 		gormLogger := logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
 			logger.Config{
@@ -73,7 +67,6 @@ func InitGormClient() {
 			},
 		)
 
-		// Try to connect with retries
 		for i := 0; i < maxRetries; i++ {
 			dbInstance, err = gorm.Open(postgres.Open(config.BuildDSN()), &gorm.Config{
 				Logger: gormLogger,
@@ -82,7 +75,6 @@ func InitGormClient() {
 			if err == nil {
 				log.Println("Successfully connected to database")
 
-				// Auto migrate the models (include the City model)
 				if err := autoMigrate(dbInstance); err != nil {
 					log.Printf("Auto migration failed: %v", err)
 					panic(err)
@@ -110,7 +102,6 @@ func autoMigrate(db *gorm.DB) error {
 }
 
 
-// GetGormClient returns the already initialized Gorm DB instance.
 func GetGormClient() *gorm.DB {
 	if dbInstance == nil {
 		panic("Database not initialized. Call InitGormClient() first.")

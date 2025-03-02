@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// Exported service instance; will be set in main.
 var ChallengeService *services.ChallengeService
 
 func CreateChallengeHandler(c *gin.Context) {
@@ -35,7 +34,6 @@ func CreateChallengeHandler(c *gin.Context) {
 		return
 	}
 	fmt.Println("created challenge...")
-	// Generate a dynamic image URL. Here we simply return a placeholder URL.
 	inviteImageURL := "https://cdn5.vectorstock.com/i/1000x1000/89/89/invite-friends-rubber-stamp-vector-12798989.jpg"
 
 	c.JSON(http.StatusOK, gin.H{
@@ -52,7 +50,6 @@ func GetChallengeHandler(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
-	// Retrieve the inviter's profile to get their username and score.
 	inviter, err := AuthService.GetProfile(challenge.InviterUserID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "inviter not found"})

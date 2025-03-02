@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// Exported service instance; will be set in main.
 var GameService *services.GameService
 
 func GetRandomDestinationHandler(c *gin.Context) {
