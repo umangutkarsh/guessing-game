@@ -2,7 +2,6 @@
 package bootstrap
 
 import (
-	"os"
 	"path"
 	"time"
 
@@ -20,7 +19,7 @@ func NewRouter() *gin.Engine {
 
 	// Enable CORS with custom configuration.
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")}, // Frontend URL from environment variables
+		AllowOrigins:     []string{"https://guessing-game-ffjoqgttq-umangutkarshs-projects.vercel.app"}, // Frontend URL from environment variables
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
