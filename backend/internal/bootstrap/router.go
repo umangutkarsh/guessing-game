@@ -14,6 +14,7 @@ func SetupRoutes(r *gin.RouterGroup) {
 
 	auth.POST("/register", handlers.RegisterUserHandler)
 	auth.GET("/profile/:userId", handlers.GetProfileHandler)
+	auth.GET("/profile/username/:username", handlers.GetProfileByUsernameHandler)
 
 	// Game routes
 	game := r.Group("/game")

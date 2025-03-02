@@ -42,3 +42,11 @@ func (s *AuthService) GetProfile(userID uuid.UUID) (*models.User, error) {
 	}
 	return &user, nil
 }
+
+func (s *AuthService) GetProfileByUsername(username string) (*models.User, error) {
+	var user models.User
+	if err := s.DB.First(&user, "username = ?", username).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

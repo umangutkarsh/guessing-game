@@ -50,3 +50,17 @@ func GetProfileHandler(c *gin.Context) {
 		"score":    user.Score,
 	})
 }
+
+func GetProfileByUsernameHandler(c *gin.Context) {
+	username := c.Param("username")
+	user, err := AuthService.GetProfileByUsername(username)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"userId":   user.ID.String(),
+		"username": user.Username,
+		"score":    user.Score,
+	})
+}
