@@ -7,13 +7,16 @@ import axios from 'axios';
 export default function Home() {
 	const [username, setUsername] = useState('');
 	const [error, setError] = useState<string | null>(null);
+	// Registered user data if exists
 	const [registeredUser, setRegisteredUser] = useState<{
 		userId: string;
 		username: string;
 	} | null>(null);
+	// Toggle between Registration and Login forms
+	const [isLogin, setIsLogin] = useState<boolean>(false);
 	const router = useRouter();
 
-	// Check if a user is already registered on mount.
+	// On mount, check if user data exists in localStorage.
 	useEffect(() => {
 		const storedUserId = localStorage.getItem('userId');
 		const storedUsername = localStorage.getItem('username');
@@ -22,6 +25,7 @@ export default function Home() {
 		}
 	}, []);
 
+	// Registration handler
 	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setError(null);
@@ -34,7 +38,7 @@ export default function Home() {
 				userId: res.data.userId,
 				username: res.data.username,
 			});
-			// Optionally, you can navigate to the game immediately:
+			// Optionally, navigate to the game immediately:
 			// router.push('/game');
 		} catch (err: unknown) {
 			if (axios.isAxiosError(err)) {
@@ -45,62 +49,109 @@ export default function Home() {
 		}
 	};
 
-	// Continue with the registered user and go to the game.
+	// Login handler – assumes a backend endpoint /auth/login that returns the user profile.
+	const handleLogin = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setError(null);
+		try {
+			const res = await api.get(`/auth/profile/username/${username}`);
+			// Store both userId and username in localStorage.
+			localStorage.setItem('userId', res.data.userId);
+			localStorage.setItem('username', res.data.username);
+			setRegisteredUser({
+				userId: res.data.userId,
+				username: res.data.username,
+			});
+		} catch (err: unknown) {
+			if (axios.isAxiosError(err)) {
+				setError(err.response?.data?.error || 'Login failed');
+			} else {
+				setError('Login failed');
+			}
+		}
+	};
+
+	// Proceed to game if user is registered
 	const handlePlay = () => {
 		router.push('/game');
 	};
 
-	// Clear the stored user data and allow new registration.
+	// Clear user data to allow new registration
 	const handleRegisterNewUser = () => {
 		localStorage.removeItem('userId');
 		localStorage.removeItem('username');
 		setRegisteredUser(null);
 		setUsername('');
+		setIsLogin(false);
 	};
 
 	return (
-		<div className='min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-4'>
-			<h1 className='text-3xl font-bold mb-6'>Welcome to Globetrotter</h1>
+		<div className='container'>
+			<h1 className='heading'>Welcome to Globetrotter</h1>
 			{registeredUser ? (
-				<div className='space-y-4 w-full max-w-sm'>
-					<p className='text-lg'>
-						You are logged in as{' '}
-						<span className='font-semibold'>{registeredUser.username}</span>.
+				<div>
+					<p>
+						You are logged in as <strong>{registeredUser.username}</strong>.
 					</p>
-					<button
-						onClick={handlePlay}
-						className='bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold'
-					>
+					<button onClick={handlePlay} className='button'>
 						Play as {registeredUser.username}
 					</button>
 					<button
 						onClick={handleRegisterNewUser}
-						className='bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-semibold'
+						className='button button-secondary'
 					>
 						Register New User
 					</button>
 				</div>
 			) : (
-				<form onSubmit={handleRegister} className='space-y-4 w-full max-w-sm'>
-					<label className='block'>
-						<span className='block mb-2'>Enter a unique username:</span>
-						<input
-							type='text'
-							value={username}
-							onChange={e => setUsername(e.target.value)}
-							required
-							className='w-full p-2 rounded bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500'
-						/>
-					</label>
-					<button
-						type='submit'
-						className='bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold'
-					>
-						Register
-					</button>
-				</form>
+				<div>
+					<div>
+						<button onClick={() => setIsLogin(false)} className='button'>
+							Register
+						</button>
+						<button
+							onClick={() => setIsLogin(true)}
+							className='button button-secondary'
+						>
+							Login
+						</button>
+					</div>
+					{isLogin ? (
+						<form onSubmit={handleLogin}>
+							<div className='form-group'>
+								<label className='label'>Enter your username:</label>
+								<input
+									type='text'
+									value={username}
+									onChange={e => setUsername(e.target.value)}
+									required
+									className='input'
+								/>
+							</div>
+							<button type='submit' className='button'>
+								Login
+							</button>
+						</form>
+					) : (
+						<form onSubmit={handleRegister}>
+							<div className='form-group'>
+								<label className='label'>Enter a unique username:</label>
+								<input
+									type='text'
+									value={username}
+									onChange={e => setUsername(e.target.value)}
+									required
+									className='input'
+								/>
+							</div>
+							<button type='submit' className='button'>
+								Register
+							</button>
+						</form>
+					)}
+				</div>
 			)}
-			{error && <p className='text-red-500 mt-4'>{error}</p>}
+			{error && <p className='error'>{error}</p>}
 		</div>
 	);
 }

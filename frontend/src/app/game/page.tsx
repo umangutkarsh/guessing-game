@@ -69,8 +69,12 @@ export default function Game() {
 
 	const handleChangeUser = () => {
 		// Clear the stored userId (and optionally username) and redirect to the registration page.
-
 		router.push('/');
+	};
+
+	// New function to route to the challenge page
+	const handleChallenge = () => {
+		router.push('/challenge');
 	};
 
 	useEffect(() => {
@@ -82,21 +86,23 @@ export default function Game() {
 	}, [userId, router]);
 
 	return (
-		<div className='min-h-screen bg-gray-900 text-white px-4 py-6'>
-			<div className='flex justify-between items-center mb-4'>
-				<h1 className='text-3xl font-bold'>Globetrotter Challenge</h1>
-				<button
-					onClick={handleChangeUser}
-					className='bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-semibold'
-				>
+		<div className='container'>
+			<div className='header'>
+				<h1 className='heading'>Globetrotter Challenge</h1>
+				<button onClick={handleChangeUser} className='button button-secondary'>
 					Register New User
 				</button>
 			</div>
-			{/* ScoreBoard now displays both correct and incorrect counts */}
 			<ScoreBoard correct={correctCount} incorrect={incorrectCount} />
-			{loading && <p className='mt-4'>Loading...</p>}
+			{/* New button to view challenge details */}
+			<div style={{ marginTop: '1rem' }}>
+				<button onClick={handleChallenge} className='button'>
+					View Challenge Details
+				</button>
+			</div>
+			{loading && <p>Loading...</p>}
 			{destination && !result && (
-				<div className='mt-4 space-y-4'>
+				<div className='card'>
 					<ClueDisplay clues={destination.clues} />
 					<DestinationOptions
 						options={destination.options}
@@ -106,19 +112,16 @@ export default function Game() {
 					<button
 						onClick={submitGuess}
 						disabled={!selectedOption}
-						className='bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold'
+						className='button'
 					>
 						Submit Guess
 					</button>
 				</div>
 			)}
 			{result && (
-				<div className='mt-6'>
+				<div className='card'>
 					<Feedback {...result} />
-					<button
-						onClick={fetchDestination}
-						className='mt-4 bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold'
-					>
+					<button onClick={fetchDestination} className='button'>
 						Play Again
 					</button>
 				</div>

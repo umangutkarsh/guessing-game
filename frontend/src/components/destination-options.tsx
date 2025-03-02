@@ -1,4 +1,3 @@
-// components/destination-options.tsx
 import React from 'react';
 
 interface Option {
@@ -18,21 +17,20 @@ const DestinationOptions: React.FC<DestinationOptionsProps> = ({
 	onOptionSelect,
 }) => {
 	return (
-		<div className='p-4 bg-gray-800 rounded-md'>
-			<h2 className='text-xl font-semibold mb-2'>Choose a Destination</h2>
-			<ul className='space-y-2'>
+		<div className='card'>
+			<h2>Choose a Destination</h2>
+			<ul>
 				{options.map(option => (
 					<li key={option.cityId}>
-						<label className='flex items-center space-x-2'>
+						<label>
 							<input
 								type='radio'
 								name='destination'
 								value={option.cityId}
 								checked={selectedOption === option.cityId}
 								onChange={() => onOptionSelect(option.cityId)}
-								className='form-radio h-4 w-4 text-blue-600'
 							/>
-							<span>{option.cityName}</span>
+							{option.cityName}
 						</label>
 					</li>
 				))}

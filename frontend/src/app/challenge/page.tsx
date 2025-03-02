@@ -3,6 +3,7 @@ import { useState } from 'react';
 import api from '@/lib/api';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Challenge() {
 	const [inviteData, setInviteData] = useState<{
@@ -11,6 +12,7 @@ export default function Challenge() {
 		inviteImage: string;
 	} | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
 	const userId =
 		typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
@@ -31,34 +33,40 @@ export default function Challenge() {
 		}
 	};
 
+	// New function to navigate back to the main page
+	const goToMainPage = () => {
+		router.push('/');
+	};
+
 	return (
-		<div className='min-h-screen bg-gray-900 text-white px-4 py-6'>
-			<h1 className='text-3xl font-bold mb-4'>Challenge a Friend</h1>
-			<button
-				onClick={handleCreateChallenge}
-				className='bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold'
-			>
+		<div className='container'>
+			<h1 className='heading'>Challenge a Friend</h1>
+			<div style={{ marginBottom: '1rem' }}>
+				<button onClick={goToMainPage} className='button button-secondary'>
+					Back to Main
+				</button>
+			</div>
+			<button onClick={handleCreateChallenge} className='button'>
 				Create Challenge Invite
 			</button>
-			{error && <p className='text-red-500 mt-4'>{error}</p>}
+			{error && <p style={{ color: 'red' }}>{error}</p>}
 			{inviteData && (
-				<div className='mt-6 space-y-4'>
-					<p className='text-lg'>Share this invite link on WhatsApp:</p>
-					<p className='break-words'>
-						<a
-							href={`${encodeURIComponent(inviteData.inviteLink)}`}
-							className='text-blue-400 underline'
-						>
+				<div className='card'>
+					<p>Share this invite link on WhatsApp:</p>
+					<p>
+						<a href={inviteData.inviteLink} className='link'>
 							{inviteData.inviteLink}
 						</a>
 					</p>
-					<div className='w-[300px]'>
+					<div
+						style={{ width: '300px', position: 'relative', height: '300px' }}
+					>
 						<Image
 							src={inviteData.inviteImage}
 							alt='Challenge Invite'
-							width={300}
-							height={300}
+							fill
 							className='rounded'
+							style={{ objectFit: 'cover' }}
 						/>
 					</div>
 				</div>
